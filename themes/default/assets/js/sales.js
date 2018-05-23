@@ -1588,7 +1588,6 @@ if (slwarehouse = __getItem('slwarehouse')) {
 		$("#ptax").trigger("change");
 	});
 
-	/**/
 	 /* ------------------------------
 	 * Sell Gift Card modal
 	 ------------------------------- */
@@ -2329,7 +2328,7 @@ function loadItems() {
 				'<input type="hidden" name="qty_oh[]" class="qty_oh" id="qty_oh_' + row_no + '" value="' + (item_qoh + old_qty_rec) + '" />' +
 				'<span class="qoh">'+ formatDecimal(item_qoh ? item_qoh : 0) +'</span></td>';
 			
-			if (site.settings.product_discount == 1) { 
+			if (site.settings.product_discount == 1) {
 				tr_html += '<td class="text-right"><input class="text-right form-control rdiscount_t rdiscount" name="product_discount[]" type="text" id="discount_' + row_no + '" value="' + item_dis + '"><span style="display:none;" class="text-right sdiscount text-danger" id="sdiscount_' + row_no + '">' + formatDecimal(item_discount) + '</span></td>';
 			}
 			if (site.settings.tax1 == 1) {

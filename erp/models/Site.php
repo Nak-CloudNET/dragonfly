@@ -1787,7 +1787,7 @@ class Site extends CI_Model
 			if($biller){
 				
 				if ($this->get_setting()->reference_format == 4 || $this->get_setting()->reference_format == 5) {
-					$q = $this->db->get_where('order_refs',array('biller_id'=>$biller), 1);
+					$q = $this->db->get_where('order_ref',array('biller_id'=>$biller), 1);
 					if ($q->num_rows() > 0) {
 						$ref = $q->row();
 						$this->db->update('order_ref', array($field => $ref->{$field} + 1), array('biller_id'=>$biller));

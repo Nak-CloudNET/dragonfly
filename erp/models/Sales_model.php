@@ -724,9 +724,9 @@ class Sales_model extends CI_Model
             //->where('warehouses_products_variants.warehouse_id', $warehouse_id)
             ->group_by('product_variants.id');
             if( ! $this->Settings->overselling && ! $all) {
-                //$this->db->where('warehouses_products_variants.quantity >', 0);
+                $this->db->where('warehouses_products_variants.quantity >', 0);
             }
-		//$this->db->order_by('product_variants.qty_unit', 'DESC');
+		$this->db->order_by('product_variants.qty_unit', 'DESC');
         $q = $this->db->get('product_variants');
         if ($q->num_rows() > 0) {
             foreach (($q->result()) as $row) {

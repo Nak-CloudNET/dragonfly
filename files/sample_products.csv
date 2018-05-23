@@ -1,3 +1,0 @@
-Code,Name,Name KH,Category Code,Unit ID,Cost,Price,Alert Quantity, Tax Rate Name,Tax Method,Subcategory Code,Product Variants Separated by |,Supplier1(No),Supplier2(No),Supplier3(No),Supplier4(No),Supplier5(No),Custom Field 1,Custom Field 2,Custom Field 3,Custom Field 4,Custom Field 5,Custom Field 6,Image,Type(standard or service)
-channa0001,channa1,channa1,cate001,11,0.5,1,10, No Tax, exclusive,,Each=1_0.5|Case=12_6|Box=24_12,,,,,,,,,,,,no_image.png,standard
-channa0002,channa2,channa2,cate001,11,0.5,1,10, No Tax, exclusive,,Each=1_0.5|Case=12_6|Box=24_12,,,,,,,,,,,,no_image.png,standard

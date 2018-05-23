@@ -82,47 +82,6 @@ class Sales extends MY_Controller
     
 	function index($warehouse_id = NULL)
     {
-		
-		$this->db->select('*');
-		$this->db->from('erp_products');
-		$this->db->where('type','standard');
-		$pros = $this->db->get()->result();
-		$pro_vars = []; 
-		
-		$this->db->select('*');
-		$this->db->from('erp_warehouses');
-		$warehouses = $this->db->get()->result();
-		foreach($pros as $pro){
-			$this->db->select('*');
-			$this->db->from('erp_product_variants');
-			$this->db->where('erp_product_variants.product_id',$pro->id);
-			$product_vars = $this->db->get()->result();
-			
-			foreach($warehouses as $warehouse){
-				$ware_product_vars = [];
-				foreach($product_vars as $product_var){
-					$ware_product_vars[] = array(
-						'option_id' => $product_var->id,
-						'product_id' => $product_var->product_id,
-						'warehouse_id' => $warehouse->id
-					);
-				}
-				//$this->db->insert_batch('erp_warehouses_products_variants',$ware_product_vars);
-				if($ware_product_vars[0]['product_id'] > 164){
-					//$this->db->insert_batch('erp_warehouses_products_variants',$ware_product_vars);
-				}
-				
-				
-			}
-			
-			
-			
-		}
-		
-		
-		
-		
-		
         $this->erp->checkPermissions('index',null, 'sales');
         $this->load->model('reports_model');
          
@@ -11688,8 +11647,8 @@ class Sales extends MY_Controller
 					$psoqty = $pending_so_qty->psoqty;
 				}
 				if ($options) {
-                    $opt = $options[count($options) -1];
-					
+
+                    $opt = $options[0];
 					if (!$option) {
 						$option = $opt->id;
 						$optqty = $opt->qty_unit;
@@ -11785,9 +11744,7 @@ class Sales extends MY_Controller
 						}
 					}
 				}
-
-
-
+				
 				if($group_prices)
 				{
 				   $curr_by_item = $this->site->getCurrencyByCode($group_prices[0]->currency_code);
