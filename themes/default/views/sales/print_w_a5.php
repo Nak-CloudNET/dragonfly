@@ -1,6 +1,6 @@
 <?php
-	//$this->erp->print_arrays($digitalDatas);
-	$ref = substr($inv->reference_no, 5);
+	//$this->erp->print_arrays($inv->reference_no);
+	$ref = substr($inv->reference_no, 8);
 ?>
 <!DOCTYPE html>
 <html>

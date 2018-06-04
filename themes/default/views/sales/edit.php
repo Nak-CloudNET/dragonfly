@@ -123,6 +123,7 @@
             },
             select: function (event, ui) {
                 event.preventDefault();
+				var customer_id = $('#slcustomer').val();
                 if (ui.item.id !== 0) {
                     var product_type = ui.item.row.type;
 					if (product_type == 'digital') {
@@ -131,7 +132,8 @@
 							url: '<?= site_url('sales/getDigitalPro'); ?>',
 							dataType: "json",
 							data: {
-								id: ui.item.item_id
+								id: ui.item.item_id,
+								customer_id : customer_id
 							},
 							success: function (result) {
 								$.each( result, function(key, value) {

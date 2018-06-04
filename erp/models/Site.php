@@ -2946,8 +2946,171 @@ class Site extends CI_Model
         }
         return FALSE;
     }
+	
+	public function item_costing($item, $pi = NULL)
+    {
+        $item_quantity = $pi ? $item['aquantity'] : $item['quantity'];
+        if (!isset($item['option_id']) || $item['option_id'] == 'null') {
+            $item['option_id'] = NULL;
+        }
 
-    public function item_costing($item, $pi = NULL)
+
+        if ($this->Settings->accounting_method != 2 && !$this->Settings->overselling) {
+
+            if ($this->site->getProductByID($item['product_id'])) {
+                if ($item['product_type'] == 'standard') {
+
+                    $cost = $this->site->calculateAVCost($item['product_id'], $item['warehouse_id'], $item['net_unit_price'], $item['unit_price'], $item['quantity'], $item['product_name'], $item['option_id'], $item_quantity, $item['transaction_type'], $item['transaction_id'], $item['status']);
+                } elseif ($item['product_type'] == 'combo') {
+                    $combo_items = $this->getProductComboItems($item['product_id'], $item['warehouse_id']);
+                    foreach ($combo_items as $combo_item) {
+                        $pr = $this->getProductByCode($combo_item->code);
+                        if ($pr->tax_rate) {
+                            $pr_tax = $this->site->getTaxRateByID($pr->tax_rate);
+                            if ($pr->tax_method) {
+                                $item_tax 		= $this->erp->formatDecimal((($combo_item->unit_price) * $pr_tax->rate) / (100 + $pr_tax->rate));
+                                $net_unit_price = $combo_item->unit_price - $item_tax;
+                                $unit_price 	= $combo_item->unit_price;
+                            } else {
+                                $item_tax 		= $this->erp->formatDecimal((($combo_item->unit_price) * $pr_tax->rate) / 100);
+                                $net_unit_price = $combo_item->unit_price;
+                                $unit_price 	= $combo_item->unit_price + $item_tax;
+                            }
+                        } else {
+                            $net_unit_price 	= $combo_item->unit_price;
+                            $unit_price 		= $combo_item->unit_price;
+                        }
+                        if ($pr->type == 'standard') {
+                            $cost = $this->site->calculateAVCost($pr->id, $item['warehouse_id'], $net_unit_price, $unit_price, ($combo_item->qty * $item['quantity']), $pr->name, NULL, $item_quantity, $item['transaction_type'], $item['transaction_id'], $item['status']);
+                        } else {
+                            $cost = array(
+                                array(
+                                    'date' 					 => date('Y-m-d'),
+                                    'product_id' 			 => $pr->id,
+                                    'product_code' 			 => $pr->code,
+                                    'product_name' 			 => $pr->name,
+                                    'product_name' 			 => $pr->type,
+                                    'sale_item_id' 			 => 'sale_items.id',
+                                    'purchase_item_id' 		 => NULL,
+                                    'quantity' 				 => ($combo_item->qty * $item['quantity']),
+                                    'purchase_net_unit_cost' => 0,
+                                    'purchase_unit_cost' 	 => 0,
+                                    'sale_net_unit_price' 	 => $combo_item->unit_price,
+                                    'sale_unit_price' 		 => $combo_item->unit_price,
+                                    'quantity_balance' 		 => NULL,
+                                    'inventory' 			 => NULL,
+                                    'transaction_type' 		 => $item['transaction_type'],
+                                    'transaction_type' 		 => $item['transaction_id'],
+                                    'status' 				 => $item['status']
+                                )
+                            );
+                        }
+                    }
+                } else {
+                    $cost = array(
+                        array(
+                            'date' 						=> date('Y-m-d'),
+                            'product_id' 				=> $item['product_id'],
+                            'product_code' 				=> $item['product_code'],
+                            'product_name' 				=> $item['product_name'],
+                            'product_type' 				=> $item['product_type'],
+                            'sale_item_id' 				=> 'sale_items.id',
+                            'purchase_item_id' 			=> NULL,
+                            'quantity' 					=> $item['quantity'],
+                            'purchase_net_unit_cost' 	=> 0,
+                            'purchase_unit_cost' 		=> 0,
+                            'sale_net_unit_price' 		=> $item['net_unit_price'],
+                            'sale_unit_price' 			=> $item['unit_price'],
+                            'quantity_balance' 			=> NULL,
+                            'inventory' 				=> NULL,
+                            'transaction_type' 			=> $item['transaction_type'],
+                            'transaction_type' 			=> $item['transaction_id'],
+                            'status' 					=> $item['status']
+                        )
+                    );
+                }
+            } elseif ($item['product_type'] == 'manual') {
+                $cost = array(
+                    array(
+                        'date' 						=> date('Y-m-d'),
+                        'product_id' 				=> $item['product_id'],
+                        'sale_item_id' 				=> 'sale_items.id',
+                        'purchase_item_id' 			=> NULL,
+                        'quantity' 					=> $item['quantity'],
+                        'purchase_net_unit_cost' 	=> 0,
+                        'purchase_unit_cost' 		=> 0,
+                        'sale_net_unit_price' 		=> $item['net_unit_price'],
+                        'sale_unit_price' 			=> $item['unit_price'],
+                        'quantity_balance' 			=> NULL,
+                        'inventory' 				=> NULL,
+                        'transaction_type' 			=> $item['transaction_type'],
+                        'transaction_type' 			=> $item['transaction_id'],
+                        'status' 					=> $item['status']
+                    )
+                );
+            }
+        } else {
+
+            if ($this->site->getProductByID($item['product_id'])) {
+                if ($item['product_type'] == 'standard') {
+                    $cost = $this->site->calculateAVCost($item['product_id'], $item['warehouse_id'], $item['net_unit_price'], $item['unit_price'], $item['quantity'], $item['product_name'], $item['option_id'], $item_quantity, (isset($item['transaction_type'])?$item['transaction_type']:''), (isset($item['transaction_id'])?$item['transaction_id']:''),(isset($item['status'])?$item['status']:''),$item['expiry']?$item['expiry']:NULL, $item['old_sqty'],null,$item['product_type']);
+                } elseif ($item['product_type'] == 'combo') {
+                    $combo_items = $this->getProductComboItems($item['product_id'], $item['warehouse_id']);
+                    foreach ($combo_items as $combo_item) {
+                        $cost = $this->site->calculateAVCost($combo_item->id, $item['warehouse_id'], ($combo_item->qty * $item['quantity']), $item['unit_price'], $item['quantity'], $item['product_name'], $item['option_id'], $item_quantity, (isset($item['transaction_type'])?$item['transaction_type']:''), (isset($item['transaction_id'])?$item['transaction_id']:''),(isset($item['status'])?$item['status']:''),$item['expiry']?$item['expiry']:NULL);
+                    }
+                } else {
+                    $cost = array(
+                        array(
+                            'date' 						=> date('Y-m-d'),
+                            'product_id' 				=> $item['product_id'],
+                            'product_code' 				=> $item['product_code'],
+                            'product_name' 				=> $item['product_name'],
+                            'product_type' 				=> $item['product_type'],
+                            'sale_item_id' 				=> 'sale_items.id',
+                            'purchase_item_id' 			=> NULL,
+                            'quantity' 					=> $item['quantity'],
+                            'purchase_net_unit_cost' 	=> 0,
+                            'purchase_unit_cost' 		=> 0,
+                            'sale_net_unit_price' 		=> $item['net_unit_price'],
+                            'sale_unit_price' 			=> $item['unit_price'],
+                            'transaction_type' 			=> $item['transaction_type'],
+                            'transaction_id' 			=> $item['transaction_id'],
+                            'quantity_balance' 			=> NULL,
+                            'inventory' 				=> NULL,
+                            'transaction_type' 			=> $item['transaction_type'],
+                            'transaction_type' 			=> $item['transaction_id'],
+                            'status' 					=> $item['status']
+                        )
+                    );
+                }
+            } elseif ($item['product_type'] == 'manual') {
+                $cost = array(
+                    array(
+                        'date' 						=> date('Y-m-d'),
+                        'product_id' 				=> $item['product_id'],
+                        'sale_item_id' 				=> 'sale_items.id',
+                        'purchase_item_id' 			=> NULL,
+                        'quantity' 					=> $item['quantity'],
+                        'purchase_net_unit_cost' 	=> 0,
+                        'purchase_unit_cost' 		=> 0,
+                        'sale_net_unit_price' 		=> $item['net_unit_price'],
+                        'sale_unit_price' 			=> $item['unit_price'],
+                        'quantity_balance' 			=> NULL,
+                        'inventory' 				=> NULL,
+                        'transaction_type' 			=> $item['transaction_type'],
+                        'transaction_type' 			=> $item['transaction_id'],
+                        'status' 					=> $item['status']
+                    )
+                );
+            }
+        }
+
+        return $cost;
+    }
+	
+
+    public function item_costing_old($item, $pi = NULL)
 	{
 		$item_quantity = $pi ? $item['aquantity'] : $item['quantity'];
         if (!isset($item['option_id']) || $item['option_id'] == 'null') {
@@ -3105,8 +3268,75 @@ class Site extends CI_Model
 		
         return $cost;
     }
+	
+	public function costing($items)
+	{
+	    $citems = array();
+        $cost = array();
+        foreach ($items as $item) {
+            $pr = $this->getProductByID($item['product_id']);
+            if ($pr->type == 'standard') {
+				
+                if (isset($citems['p' . $item['product_id'] . 'o' . $item['option_id']. 'e' . $item['expiry']])) {
+                    $citems['p' . $item['product_id'] . 'o' . $item['option_id']. 'e' . $item['expiry']]['aquantity'] += $item['quantity'];
+					$citems['p' . $item['product_id'] . 'o' . $item['option_id']. 'e' . $item['expiry']]['quantity'] += $item['quantity'];
+					$citems['p' . $item['product_id'] . 'o' . $item['option_id']. 'e' . $item['expiry']]['quantity_balance'] += $item['quantity_balance'];
+					$citems['p' . $item['product_id'] . 'o' . $item['option_id']. 'e' . $item['expiry']]['old_sqty'] = $item['old_sqty'];
+                } else {
+                    $citems['p' . $item['product_id'] . 'o' . $item['option_id']. 'e' . $item['expiry']] = $item;
+                    $citems['p' . $item['product_id'] . 'o' . $item['option_id']. 'e' . $item['expiry']]['aquantity'] = $item['quantity'];
+					$citems['p' . $item['product_id'] . 'o' . $item['option_id']. 'e' . $item['expiry']]['old_sqty'] = $item['old_sqty'];
+                }
+				
+            } elseif ($pr->type == 'combo') {
+                $combo_items = $this->getProductComboItems($item['product_id'], $item['warehouse_id']);
+                foreach ($combo_items as $combo_item) {
+                    if ($combo_item->type == 'standard') {
+                        if (isset($citems['p' . $combo_item->id . 'o' . $item['option_id']. 'e' . $item['expiry']])) {
+                            $citems['p' . $combo_item->id . 'o' . $item['option_id']. 'e' . $item['expiry']]['aquantity'] += ($combo_item->qty*$item['quantity']);
+                        } else {
+                            $cpr = $this->getProductByID($combo_item->id);
+                            if ($cpr->tax_rate) {
+                                $cpr_tax = $this->site->getTaxRateByID($cpr->tax_rate);
+                                if ($cpr->tax_method) {
+                                    $item_tax = $this->erp->formatDecimal((($combo_item->unit_price) * $cpr_tax->rate) / (100 + $cpr_tax->rate));
+                                    $net_unit_price = $combo_item->unit_price - $item_tax;
+                                    $unit_price = $combo_item->unit_price;
+                                } else {
+                                    $item_tax = $this->erp->formatDecimal((($combo_item->unit_price) * $cpr_tax->rate) / 100);
+                                    $net_unit_price = $combo_item->unit_price;
+                                    $unit_price = $combo_item->unit_price + $item_tax;
+                                }
+                            } else {
+                                $net_unit_price = $combo_item->unit_price;
+                                $unit_price = $combo_item->unit_price;
+                            }
+                            $cproduct = array('product_id' => $combo_item->id, 'product_name' => $cpr->name, 'product_type' => $combo_item->type, 'quantity' => ($combo_item->qty*$item['quantity']), 'net_unit_price' => $net_unit_price, 'unit_price' => $unit_price, 'warehouse_id' => $item['warehouse_id'], 'item_tax' => $item_tax, 'tax_rate_id' => $cpr->tax_rate, 'tax' => ($cpr_tax->type == 1 ? $cpr_tax->rate.'%' : $cpr_tax->rate), 'option_id' => NULL);
+                            $citems['p' . $combo_item->id . 'o' . $item['option_id']. 'e' . $item['expiry']] = $cproduct;
+                            $citems['p' . $combo_item->id . 'o' . $item['option_id']. 'e' . $item['expiry']]['aquantity'] = ($combo_item->qty*$item['quantity']);
+                        }
+						$citems['p' . $combo_item->id . 'o' . $item['option_id']. 'e' . $item['expiry']]['transaction_type'] = $item['transaction_type'];
+						$citems['p' . $combo_item->id . 'o' . $item['option_id']. 'e' . $item['expiry']]['transaction_id'] = $item['transaction_id'];
+						$citems['p' . $combo_item->id . 'o' . $item['option_id']. 'e' . $item['expiry']]['status'] = $item['status'];
+                    }
+                }
+            }
+        }
 
-    public function costing($items) 
+        foreach ($citems as $item) {
+            $item['aquantity'] = $citems['p' . $item['product_id'] . 'o' . $item['option_id']]['aquantity'];
+            $cost[] = $this->item_costing($item, TRUE);
+
+        }
+
+
+
+        return $cost;
+    }
+	
+	
+
+    public function costing_old($items) 
 	{
 	    $citems = array();
         foreach ($items as $item) {

@@ -65,6 +65,10 @@
 			return '<div class="text-center">' + select + '</div>';
 		}
 
+        function nullable(x){
+            return x;
+        }
+
         $('#CGData').dataTable({
             "aaSorting": [[1, "asc"]],
             "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "<?= lang('all') ?>"]],
@@ -84,7 +88,7 @@
                 nRow.className = "product_group_price_id";
                 return nRow;
             },
-            "aoColumns": [{"bSortable": false, "mRender": checkbox}, null, null, {"bSearchable": false, "mRender": colUnit}, {"bSearchable": false, "mRender": setCurrencies}, {"bSearchable": false, "bSortable": false, "mRender": price_input}, {"bSortable": false}]
+            "aoColumns": [{"bSortable": false, "mRender": checkbox}, {"bSortable": false, "mRender": nullable}, null, {"bSearchable": false, "mRender": colUnit}, {"bSearchable": false, "mRender": setCurrencies}, {"bSearchable": false, "bSortable": false, "mRender": price_input}, {"bSortable": false}]
         }).fnSetFilteringDelay();
 		
 		$(".currency").select2();
@@ -150,7 +154,7 @@
 								<th class="col-xs-4"><?= lang("product_name"); ?></th>
 								<th class="col-xs-1"><?= lang("unit"); ?></th>
 								<th class="col-xs-4"><?= lang("currency"); ?></th>
-								<th><?= lang("price"); ?></th>
+								<th><?= lang("price");?></th>
 								<th style="width:85px;"><?= lang("update"); ?></th>
 							</tr>
                         </thead>

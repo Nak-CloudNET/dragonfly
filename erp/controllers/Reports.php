@@ -21922,7 +21922,8 @@ class Reports extends MY_Controller
     {
         $this->erp->checkPermissions('inventory_valuation_detail', NULL, 'product_report');
         $wid = $this->reports_model->getWareByUserID();
-		$datt =$this->reports_model->getLastDate("inventory_valuation_details","date");
+		$datt =$this->reports_model->getLastDate("stock_trans","tran_date");
+		
         if ($this->input->post('swarehouse')) {
             $wahouse_id =  $this->input->post('swarehouse');
         }else{

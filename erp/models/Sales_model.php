@@ -2009,6 +2009,7 @@ class Sales_model extends CI_Model
 			$i = 0; 
 			
 			foreach ($items as $item) {
+				
 				$product            = $this->site->getProductByID($item['product_id']);
 				$item['unit_cost'] 	= $product->cost;
 				$item['sale_id'] 	= $sale_id;
@@ -2072,16 +2073,7 @@ class Sales_model extends CI_Model
 				
 				$i++;
 			}
-			/*
-            if ($data['sale_status'] == 'completed') {
-                $this->site->syncQuantity($sale_id);
-            }
-			*/
 			
-			/*if ($data['sale_status'] == 'completed') {
-				$cost = $this->site->costing($items);
-				$this->site->syncPurchaseItems_delivery($cost, $deliver_id_muti);
-			}*/
 			
 			if($loans){
 				foreach($loans as $loan){
@@ -2091,6 +2083,7 @@ class Sales_model extends CI_Model
 			}
 			
 			if(strpos($data['paid'], '-') !== true){
+				
 				if ($data['payment_status'] == 'partial' || $data['payment_status'] == 'paid' && !empty($payment)) {
 					$payment['sale_id'] = $sale_id;
 					if ($payment['paid_by'] == 'gift_card') {
@@ -2142,6 +2135,7 @@ class Sales_model extends CI_Model
 					'grand_total' => $data['grand_total'],
 					'created_by' => $this->session->userdata('user_id'),
 				);
+				
 				if ($this->db->insert('return_sales', $returns)) {
 					$return_id = $this->db->insert_id();
 					if ($this->site->getReference('re') == $returns['reference_no']){
@@ -2234,7 +2228,7 @@ class Sales_model extends CI_Model
 					}
 						$this->calculateSaleTotals($sale_id, $return_id, NULL, $payment_status);
 					}
-					$this->site->syncQuantity(NULL, NULL, $sale_items);
+					
 				}
 			}
             $this->erp->update_award_points($data['grand_total'], $data['customer_id'], $data['created_by'], NULL ,$data['saleman_by']);
@@ -2580,15 +2574,14 @@ class Sales_model extends CI_Model
 
 				
 			}
-			//if($data['payment_status'] == 'paid')
-			
 			
             if ($data['sale_status'] == 'completed') {
 				$this->site->syncSalePayments($id);
 				$cost = $this->site->costing($items);
+				
                 $this->site->syncPurchaseItems($cost);
             }
-            $this->site->syncQuantity($id);
+            
             $this->erp->update_award_points($data['grand_total'], $data['customer_id'], $data['created_by'], null, $data['saleman_by']);
             return true;
         }

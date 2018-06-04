@@ -1062,13 +1062,13 @@
                                                         <i class="fa fa-users"></i><span class="text"> <?= lang('list_suppliers'); ?></span>
                                                     </a>
                                                 </li>
-												<!--
+												
                                                 <li id="suppliers_index">
                                                     <a class="submenu" href="<?= site_url('suppliers/add'); ?>" data-toggle="modal" data-target="#myModal">
                                                         <i class="fa fa-plus-circle"></i><span class="text"> <?= lang('add_supplier'); ?></span>
                                                     </a>
                                                 </li>
-												-->
+												
                                                 <!-- <li id="employees_index">
 													<a class="submenu" href="<?= site_url('employees'); ?>">
 														<i class="fa fa-users"></i><span class="text"> <?= lang('list_employees'); ?></span>
@@ -1465,13 +1465,13 @@
 																			<i class="fa fa-barcode"></i><span class="text"> <?= lang('adjustment_report'); ?></span>
 																		</a>
 																	</li>
-																	<!--
+																	
 																	<li id="reports_inventory_valuation_detail">
 																		<a href="<?= site_url('reports/inventory_valuation_detail') ?>">
 																			<i class="fa fa-barcode"></i><span class="text"> <?= lang('inventory_valuation_detail'); ?></span>
 																		</a>
 																	</li>
-																	-->
+																	
 																	<li id="reports_supplier_details">
 																		<a href="<?= site_url('reports/supplier_details') ?>">
 																			<i class="fa fa-barcode"></i><span class="text"> <?= lang('supplier_products'); ?></span>
@@ -2719,13 +2719,13 @@
                                                 </li>
                                                 <?php } ?>
                                                 <?php if($GP['product_report-inventory_valuation_detail']){ ?>
-													<!--
+													
 													<li id="reports_inventory_valuation_details">
                                                         <a href="<?= site_url('reports/inventory_valuation_detail') ?>">
                                                             <i class="fa fa-barcode"></i><span class="text"> <?= lang('inventory_valuation_detail'); ?></span>
                                                         </a>
                                                     </li>
-													-->
+													
                                                 <?php } ?>
 												<?php if($GP['product_report-suppliers']){ ?>
 													<li id="reports_supplier_details">

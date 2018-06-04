@@ -119,6 +119,11 @@
 			if (__getItem('payment_deposit')) {
                 __removeItem('payment_deposit');
             }
+			
+			if (__getItem('edit_sale')) {
+                __removeItem('edit_sale');
+            }
+			
 			<?=$this->session->set_userdata('remove_s2', '0');?>
 		}
         <?php if(isset($sale_order_id) || isset($delivery_id)) { ?>

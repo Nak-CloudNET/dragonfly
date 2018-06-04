@@ -5287,13 +5287,14 @@ class system_settings extends MY_Controller
 	
     function group_product_prices($group_id = NULL)
     {
-
+		
         if (!$group_id) {
             $this->session->set_flashdata('error', lang('no_price_group_selected'));
             redirect('system_settings/price_groups');
         }
 		$this->data['currencies'] = $this->site->getTwoCurrencies();
         $this->data['price_group'] = $this->settings_model->getPriceGroupByID($group_id);
+		
         $this->data['error'] = validation_errors() ? validation_errors() : $this->session->flashdata('error');
         $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => site_url('system_settings'), 'page' => lang('system_settings')),  array('link' => site_url('system_settings/price_groups'), 'page' => lang('price_groups')), array('link' => '#', 'page' => lang('group_product_prices')));
         $meta = array('page_title' => lang('group_product_prices'), 'bc' => $bc);

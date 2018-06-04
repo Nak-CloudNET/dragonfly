@@ -1913,9 +1913,7 @@ class Purchases_model extends CI_Model
 				$this->db->update('purchases_order', $status, array('id' => $quote_id));
 			}
 			
-            if ($data['status'] == 'received') {
-                // $this->site->syncQuantity(NULL, $purchase_id);
-            }
+            
             
 			return true;
         }
@@ -2349,11 +2347,11 @@ class Purchases_model extends CI_Model
 			}
 			
             if ($opurchase->status == 'received' || $opurchase->status == 'partial') {
-                $this->site->syncQuantity(NULL, NULL, $oitems);
+                //$this->site->syncQuantity(NULL, NULL, $oitems);
             }
 			
             if ($data['status'] == 'received' || $data['status'] == 'partial') {
-                $this->site->syncQuantity(NULL, $id);
+                //$this->site->syncQuantity(NULL, $id);
             }
 			
 			$this->update_quote_status($data['quote_id']);

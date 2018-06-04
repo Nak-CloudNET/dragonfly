@@ -1388,7 +1388,7 @@ class Products_model extends CI_Model
             }
 
 			foreach($dataPurchase as $products){
-				$this->site->syncQuantitys(null, null, null, $products['product_id']);
+				//$this->site->syncQuantitys(null, null, null, $products['product_id']);
 			}
 			return true;
         }
@@ -2915,7 +2915,7 @@ class Products_model extends CI_Model
 			}
 			
 			foreach($pro_unique as $product_id){
-				$this->site->syncQuantitys(null, null, null, $product_id);
+				//$this->site->syncQuantitys(null, null, null, $product_id);
 			}			
 			return true;
         }

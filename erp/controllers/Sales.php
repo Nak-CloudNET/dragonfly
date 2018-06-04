@@ -11528,23 +11528,79 @@ class Sales extends MY_Controller
 						}
 					}
                 }
+				
+				// sort array using raw php stupid code 
+				for($i = 0; $i < sizeof($group_prices) - 1; $i++){
+					for($j = $i-1; $j < sizeof($group_prices); $j++){
+						if($group_prices[$i]->price < $group_prices[$j]->price){
+							$temp1 = $group_prices[$i]->id;
+							$temp2 = $group_prices[$i]->product_id;
+							$temp3 = $group_prices[$i]->unit_id;
+							$temp4 = $group_prices[$i]->unit_type;
+							$temp5 = $group_prices[$i]->price_group_id;
+							$temp6 = $group_prices[$i]->price;
+							$temp7 = $group_prices[$i]->currency_code;
+							$temp8 = $group_prices[$i]->group_name;
+							$temp9 = $group_prices[$i]->default_price;
+							$temp10 = $group_prices[$i]->rate;
+							$temp11 = $group_prices[$i]->setting_curr;
+							
+							$group_prices[$i]->id = $group_prices[$j]->id;
+							$group_prices[$j]->id;
+							
+							$group_prices[$i]->product_id = $group_prices[$j]->product_id;
+							$group_prices[$j]->product_id;
+							
+							$group_prices[$i]->unit_id = $group_prices[$j]->unit_id;
+							$group_prices[$j]->unit_id;
+							
+							$group_prices[$i]->unit_type = $group_prices[$j]->unit_type;
+							$group_prices[$j]->unit_type;
+							
+							$group_prices[$i]->price_group_id = $group_prices[$j]->price_group_id;
+							$group_prices[$j]->price_group_id;
+							
+							$group_prices[$i]->price = $group_prices[$j]->price;
+							$group_prices[$j]->price;
+							
+							$group_prices[$i]->currency_code = $group_prices[$j]->currency_code;
+							$group_prices[$j]->currency_code;
+							
+							$group_prices[$i]->group_name = $group_prices[$j]->group_name;
+							$group_prices[$j]->group_name;
+							
+							$group_prices[$i]->default_price = $group_prices[$j]->default_price;
+							$group_prices[$j]->default_price;
+							
+							$group_prices[$i]->rate = $group_prices[$j]->rate;
+							$group_prices[$j]->rate;
+							
+							$group_prices[$i]->setting_curr = $group_prices[$j]->setting_curr;
+							$group_prices[$j]->setting_curr;
+							
+							
+						}
+					}
+				}
+				
 
-                if($group_prices)
-                {
-                    $curr_by_item = $this->site->getCurrencyByCode($group_prices[0]->currency_code);
-                    $row->price_id = $group_prices[count($group_prices)-1]->id ? $group_prices[count($group_prices)-1]->id : 0;
-                    $row->price = $group_prices[count($group_prices)-1]->price ? $group_prices[count($group_prices)-1]->price : 0;
+				
+				if($group_prices)
+				{
+				   $curr_by_item = $this->site->getCurrencyByCode($group_prices[0]->currency_code);
+				   $row->price_id = $group_prices[0]->id ? $group_prices[0]->id : 0;
+				   $row->price = $group_prices[0]->price ? $group_prices[0]->price : 0;
+				   
+				   if($customer_group->makeup_cost == 1){
+						$row->price = $row->cost + (($row->cost * (isset($percent->percent)?$percent->percent:0)) / 100);
 
-                    if($customer_group->makeup_cost == 1){
-                        $row->price = $row->cost + (($row->cost * (isset($percent->percent)?$percent->percent:0)) / 100);
-
-                    }else{
-
-                        $row->price = $group_prices[count($group_prices)-1]->price + (($group_prices[count($group_prices)-1]->price * $customer_group->percent) / 100);
-                    }
-                }else{
-                    $row->price_id = 0;
-                }
+                   }else{
+						$row->price = $group_prices[0]->price + (($group_prices[0]->price * $customer_group->percent) / 100);
+					}
+				}else{
+					$row->price_id = 0;
+				}
+				
 
 				
                 $pending_so_qty = $this->sales_model->getPendingSOQTYByProductID($row->id);
@@ -11646,6 +11702,7 @@ class Sales extends MY_Controller
 				if($pending_so_qty) {
 					$psoqty = $pending_so_qty->psoqty;
 				}
+				
 				if ($options) {
 
                     $opt = $options[0];
@@ -11745,23 +11802,78 @@ class Sales extends MY_Controller
 					}
 				}
 				
+				
+				// sort array using raw php stupid code 
+				for($i = 0; $i < sizeof($group_prices) - 1; $i++){
+					for($j = $i-1; $j < sizeof($group_prices); $j++){
+						if($group_prices[$i]->price < $group_prices[$j]->price){
+							$temp1 = $group_prices[$i]->id;
+							$temp2 = $group_prices[$i]->product_id;
+							$temp3 = $group_prices[$i]->unit_id;
+							$temp4 = $group_prices[$i]->unit_type;
+							$temp5 = $group_prices[$i]->price_group_id;
+							$temp6 = $group_prices[$i]->price;
+							$temp7 = $group_prices[$i]->currency_code;
+							$temp8 = $group_prices[$i]->group_name;
+							$temp9 = $group_prices[$i]->default_price;
+							$temp10 = $group_prices[$i]->rate;
+							$temp11 = $group_prices[$i]->setting_curr;
+							
+							$group_prices[$i]->id = $group_prices[$j]->id;
+							$group_prices[$j]->id;
+							
+							$group_prices[$i]->product_id = $group_prices[$j]->product_id;
+							$group_prices[$j]->product_id;
+							
+							$group_prices[$i]->unit_id = $group_prices[$j]->unit_id;
+							$group_prices[$j]->unit_id;
+							
+							$group_prices[$i]->unit_type = $group_prices[$j]->unit_type;
+							$group_prices[$j]->unit_type;
+							
+							$group_prices[$i]->price_group_id = $group_prices[$j]->price_group_id;
+							$group_prices[$j]->price_group_id;
+							
+							$group_prices[$i]->price = $group_prices[$j]->price;
+							$group_prices[$j]->price;
+							
+							$group_prices[$i]->currency_code = $group_prices[$j]->currency_code;
+							$group_prices[$j]->currency_code;
+							
+							$group_prices[$i]->group_name = $group_prices[$j]->group_name;
+							$group_prices[$j]->group_name;
+							
+							$group_prices[$i]->default_price = $group_prices[$j]->default_price;
+							$group_prices[$j]->default_price;
+							
+							$group_prices[$i]->rate = $group_prices[$j]->rate;
+							$group_prices[$j]->rate;
+							
+							$group_prices[$i]->setting_curr = $group_prices[$j]->setting_curr;
+							$group_prices[$j]->setting_curr;
+							
+							
+						}
+					}
+				}
+				
+				
 				if($group_prices)
 				{
 				   $curr_by_item = $this->site->getCurrencyByCode($group_prices[0]->currency_code);
-				   $row->price_id = $group_prices[count($group_prices)-1]->id ? $group_prices[count($group_prices)-1]->id : 0;
-				   $row->price = $group_prices[count($group_prices)-1]->price ? $group_prices[count($group_prices)-1]->price : 0;
+				   $row->price_id = $group_prices[0]->id ? $group_prices[0]->id : 0;
+				   $row->price = $group_prices[0]->price ? $group_prices[0]->price : 0;
 				   
 				   if($customer_group->makeup_cost == 1){
-						//$row->price = $row->cost + (($row->cost * $customer_group->percent) / 100);
 						$row->price = $row->cost + (($row->cost * (isset($percent->percent)?$percent->percent:0)) / 100);
 
                    }else{
-                       //$row->price = $group_prices[0]->price;
-						$row->price = $group_prices[count($group_prices)-1]->price + (($group_prices[count($group_prices)-1]->price * $customer_group->percent) / 100);
+						$row->price = $group_prices[0]->price + (($group_prices[0]->price * $customer_group->percent) / 100);
 					}
 				}else{
 					$row->price_id = 0;
 				}
+				
                 $pending_so_qty = $this->sales_model->getPendingSOQTYByProductID($row->id);
                 $psoqty = 0;
 
@@ -11858,7 +11970,7 @@ class Sales extends MY_Controller
 				}
 				
                 if ($options) {
-                    $opt = $options[count($options)-1];
+                    $opt = $options[0];
                     if (!$option) {
                         $option = $opt->id;
                     }
@@ -11915,6 +12027,60 @@ class Sales extends MY_Controller
 					}
                 }
 				
+				// sort array using raw php stupid code 
+				for($i = 0; $i < sizeof($group_prices) - 1; $i++){
+					for($j = $i-1; $j < sizeof($group_prices); $j++){
+						if($group_prices[$i]->price < $group_prices[$j]->price){
+							$temp1 = $group_prices[$i]->id;
+							$temp2 = $group_prices[$i]->product_id;
+							$temp3 = $group_prices[$i]->unit_id;
+							$temp4 = $group_prices[$i]->unit_type;
+							$temp5 = $group_prices[$i]->price_group_id;
+							$temp6 = $group_prices[$i]->price;
+							$temp7 = $group_prices[$i]->currency_code;
+							$temp8 = $group_prices[$i]->group_name;
+							$temp9 = $group_prices[$i]->default_price;
+							$temp10 = $group_prices[$i]->rate;
+							$temp11 = $group_prices[$i]->setting_curr;
+							
+							$group_prices[$i]->id = $group_prices[$j]->id;
+							$group_prices[$j]->id;
+							
+							$group_prices[$i]->product_id = $group_prices[$j]->product_id;
+							$group_prices[$j]->product_id;
+							
+							$group_prices[$i]->unit_id = $group_prices[$j]->unit_id;
+							$group_prices[$j]->unit_id;
+							
+							$group_prices[$i]->unit_type = $group_prices[$j]->unit_type;
+							$group_prices[$j]->unit_type;
+							
+							$group_prices[$i]->price_group_id = $group_prices[$j]->price_group_id;
+							$group_prices[$j]->price_group_id;
+							
+							$group_prices[$i]->price = $group_prices[$j]->price;
+							$group_prices[$j]->price;
+							
+							$group_prices[$i]->currency_code = $group_prices[$j]->currency_code;
+							$group_prices[$j]->currency_code;
+							
+							$group_prices[$i]->group_name = $group_prices[$j]->group_name;
+							$group_prices[$j]->group_name;
+							
+							$group_prices[$i]->default_price = $group_prices[$j]->default_price;
+							$group_prices[$j]->default_price;
+							
+							$group_prices[$i]->rate = $group_prices[$j]->rate;
+							$group_prices[$j]->rate;
+							
+							$group_prices[$i]->setting_curr = $group_prices[$j]->setting_curr;
+							$group_prices[$j]->setting_curr;
+							
+							
+						}
+					}
+				}
+				
 				if($group_prices)
 				{
 				   $curr_by_item = $this->site->getCurrencyByCode($group_prices[0]->currency_code);
@@ -11922,14 +12088,16 @@ class Sales extends MY_Controller
 				   $row->price = $group_prices[0]->price ? $group_prices[0]->price : 0;
 				   
 				   if($customer_group->makeup_cost == 1){
-						//$row->price = $row->cost + (($row->cost * $customer_group->percent) / 100);
 						$row->price = $row->cost + (($row->cost * (isset($percent->percent)?$percent->percent:0)) / 100);
-					}else{
+
+                   }else{
 						$row->price = $group_prices[0]->price + (($group_prices[0]->price * $customer_group->percent) / 100);
 					}
 				}else{
 					$row->price_id = 0;
 				}
+				
+				
                 $pending_so_qty = $this->sales_model->getPendingSOQTYByProductID($row->id);
                 $psoqty = 0;
 
@@ -12195,7 +12363,7 @@ class Sales extends MY_Controller
         $customer   = Null;
         $term = $this->input->get('term', TRUE);
         $customer_id = $this->input->get('customer_id', TRUE);
-
+		
         $customer 		= $this->site->getCompanyByID($customer_id);
         $customer_group = $this->site->getCustomerGroupByID($customer->customer_group_id);
 
@@ -12213,10 +12381,9 @@ class Sales extends MY_Controller
                 $row->digital_code 		= $item->code . ' [' . $row->code .']';
                 $row->digital_name 		= $item->name . ' [' . $row->name .']';
                 $options 				= $this->sales_model->getProductOptions($row->id, $warehouse_id);
-
-                $group_prices           = $this->sales_model->getProductPriceGroupId($row->id, $customer->price_group_id);
+				$group_prices           = $this->sales_model->getProductPriceGroupId($row->id, $customer->price_group_id);
                 $all_group_prices       = $this->sales_model->getProductPriceGroup($row->id);
-
+				
                 if($expiry_status == 1) {
                     $expdates = $this->sales_model->getProductExpireDate($row->id, $warehouse_id);
                 }else{
@@ -12224,8 +12391,6 @@ class Sales extends MY_Controller
                 }
 
                 $w_piece = $this->sales_model->getProductVariantByOptionID($row->id);
-                $row->price_id = $group_prices[0]->id ? $group_prices[0]->id : 0;
-
                 if ($options) {
                     $opt = $options[0];
                     if (!$option) {
@@ -12325,30 +12490,78 @@ class Sales extends MY_Controller
 
                 }
 
+				// sort array using raw php stupid code 
+				
+				for($i = 0; $i < sizeof($group_prices) - 1; $i++){
+					for($j = $i-1; $j < sizeof($group_prices); $j++){
+						if($group_prices[$i]->price < $group_prices[$j]->price){
+							$temp1 = $group_prices[$i]->id;
+							$temp2 = $group_prices[$i]->product_id;
+							$temp3 = $group_prices[$i]->unit_id;
+							$temp4 = $group_prices[$i]->unit_type;
+							$temp5 = $group_prices[$i]->price_group_id;
+							$temp6 = $group_prices[$i]->price;
+							$temp7 = $group_prices[$i]->currency_code;
+							$temp8 = $group_prices[$i]->group_name;
+							$temp9 = $group_prices[$i]->default_price;
+							$temp10 = $group_prices[$i]->rate;
+							$temp11 = $group_prices[$i]->setting_curr;
+							
+							$group_prices[$i]->id = $group_prices[$j]->id;
+							$group_prices[$j]->id;
+							
+							$group_prices[$i]->product_id = $group_prices[$j]->product_id;
+							$group_prices[$j]->product_id;
+							
+							$group_prices[$i]->unit_id = $group_prices[$j]->unit_id;
+							$group_prices[$j]->unit_id;
+							
+							$group_prices[$i]->unit_type = $group_prices[$j]->unit_type;
+							$group_prices[$j]->unit_type;
+							
+							$group_prices[$i]->price_group_id = $group_prices[$j]->price_group_id;
+							$group_prices[$j]->price_group_id;
+							
+							$group_prices[$i]->price = $group_prices[$j]->price;
+							$group_prices[$j]->price;
+							
+							$group_prices[$i]->currency_code = $group_prices[$j]->currency_code;
+							$group_prices[$j]->currency_code;
+							
+							$group_prices[$i]->group_name = $group_prices[$j]->group_name;
+							$group_prices[$j]->group_name;
+							
+							$group_prices[$i]->default_price = $group_prices[$j]->default_price;
+							$group_prices[$j]->default_price;
+							
+							$group_prices[$i]->rate = $group_prices[$j]->rate;
+							$group_prices[$j]->rate;
+							
+							$group_prices[$i]->setting_curr = $group_prices[$j]->setting_curr;
+							$group_prices[$j]->setting_curr;
+							
+							
+						}
+					}
+				}
 
+                
+				if($group_prices)
+				{
+				   $curr_by_item = $this->site->getCurrencyByCode($group_prices[0]->currency_code);
+				   $row->price_id = $group_prices[0]->id ? $group_prices[0]->id : 0;
+				   $row->price = $group_prices[0]->price ? $group_prices[0]->price : 0;
+				   
+				   if($customer_group->makeup_cost == 1){
+						$row->price = $row->cost + (($row->cost * (isset($percent->percent)?$percent->percent:0)) / 100);
 
-                if($group_prices)
-                {
-
-                    $curr_by_item = $this->site->getCurrencyByCode($group_prices[0]->currency_code);
-                    $row->price_id = $group_prices[count($group_prices)-1]->id ? $group_prices[count($group_prices)-1]->id : 0;
-                    $row->price = $group_prices[count($group_prices)-1]->price ? $group_prices[count($group_prices)-1]->price : 0;
-
-                    if($customer_group->makeup_cost == 1){
-                        //$row->price = $row->cost + (($row->cost * $customer_group->percent) / 100);
-                        $row->price = $row->cost + (($row->cost * (isset($percent->percent)?$percent->percent:0)) / 100);
-
-                    }else{
-                        //$row->price = $group_prices[0]->price;
-                        $row->price = $group_prices[count($group_prices)-1]->price + (($group_prices[count($group_prices)-1]->price * $customer_group->percent) / 100);
-                        $rsss = $group_prices[count($group_prices)-1]->price + (($group_prices[count($group_prices)-1]->price * $customer_group->percent) / 100);
-
-                    }
-                }else{
-
-                    $row->price_id = 0;
-                }
-
+                   }else{
+						$row->price = $group_prices[0]->price + (($group_prices[0]->price * $customer_group->percent) / 100);
+					}
+				}else{
+					$row->price_id = 0;
+				}
+				
 
 
                 $row->piece			  = 0;

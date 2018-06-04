@@ -1,3 +1,7 @@
+<?php
+	//$this->erp->print_arrays("a");
+	
+?>
 <style type="text/css" media="all">
 	#PRData{ 
 		white-space:nowrap; 
@@ -129,6 +133,7 @@
                             </div>
                         </div>
 					</div>
+					
 					<div class="form-group">
                         <div
                             class="controls"> <?php echo form_submit('submit_report', $this->lang->line("submit"), 'class="btn btn-primary"'); ?> </div>
@@ -198,6 +203,7 @@
 							
 							<?php 
 							}
+							
 							$qty_on_hand = 0;
 							$total_on_hand = 0;
 							$total_asset_val = 0;
@@ -205,6 +211,7 @@
 							$prDetails = $this->reports_model->getProductsInventoryValuationByProduct($warehouse->warehouse_id,($cate_id1?$cate_id1:$category->category_id),($product_id1?$product_id1:$product->product_id),$stockType1,$from_date1,$to_date1,$reference1,$biller1);
 							foreach($prDetails as $pr)
 							{
+								
 								$p_cost = 0;
 								$p_qty = 0;
 								
@@ -276,6 +283,7 @@
 								<td class="text-right"><?= $this->erp->formatMoney($asset_value) ?></td>
 							</tr>
 							<?php 
+							
 								$total_on_hand =$qty_on_hand;
 								$total_asset_val =$asset_value;
 							} ?>
@@ -289,6 +297,7 @@
 								<td class="text-right"><b><?= $this->erp->formatMoney($total_asset_val); ?></b></td>
 							</tr>
 							<?php 
+							
 								$total_qoh_per_warehouse += $total_on_hand;
 								$total_assetVal_per_warehouse += $total_asset_val;
 							} 
@@ -316,7 +325,8 @@
 								<td class="text-right"><b><?= $this->erp->formatMoney($total_assetVal_per_warehouse_cat); ?></b></td>
 							</tr>
 							
-							<?php
+							<?php 
+							
 							$gtt +=$total_qoh_per_warehouse_cat;
 							$gqty +=$total_assetVal_per_warehouse_cat;
 							} 

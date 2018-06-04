@@ -1034,6 +1034,12 @@ if (slwarehouse = __getItem('slwarehouse')) {
 	 * Delete Row Method
 	 * ---------------------- */
 	$(document).on('click', '.sldel', function () {
+		
+		var edit_status = __getItem('edit_sale');
+		if(edit_status){
+			return false;
+		}
+		
 		var row = $(this).closest('tr');
 		var item_id = row.attr('data-item-id');
 		

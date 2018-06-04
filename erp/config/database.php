@@ -65,7 +65,7 @@
         'hostname' => 'localhost',
         'username' => 'root',
         'password' => '',
-        'database' => 'iclouderp_v3_5_dragonfly',
+        'database' => 'dragonfly',
         'dbdriver' => 'mysqli',
         'dbprefix' => 'erp_',
         'pconnect' => FALSE,
